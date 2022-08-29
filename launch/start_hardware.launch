@@ -1,0 +1,20 @@
+<launch>
+    <arg name="host" default="192.168.3.100" />
+
+    <!-- start lidar -->
+    <node pkg="omron_os32c_driver" type="omron_os32c_node" name="omron_os32c_node">
+        <param name="host" value="$(arg host)" />
+        <param name="frame_id" value="laser" />
+        <param name="start_angle" value="1.57079" />
+        <param name="end_angle" value="-1.57079" />
+    </node>
+
+    <!-- start camera -->
+    <!-- <include file="$(find omron_os32c_driver)/launch/drivers/start_rs_camera.launch" />     -->
+
+    <!-- tf transform -->
+    <node pkg="tf" type="static_transform_publisher" name="bl_2_laser" args="0.0 0.11 0.875 0.0 0.0 3.14159265 base_link laser 10" />
+    <node pkg="tf" type="static_transform_publisher" name="laser_2_camera" args="0.02 0.04 -0.05 0.0 0.0 3.14159265 laser rs_camera_link 10" />
+
+
+</launch>
