@@ -1,0 +1,51 @@
+<launch>
+  <arg name="host" default="192.168.3.100" />
+  <launch>
+    <arg name="host" default="192.168.1.1" />
+  
+    <node pkg="omron_os32c_driver" type="omron_os32c_node" name="omron_os32c_node">
+      <param name="host" value="$(arg host)" />
+      <param name="frame_id" value="laser" />
+      <param name="start_angle" value="2.2899" />
+      <param name="end_angle" value="-2.2899" />
+    </node>
+  </launch>
+  <!-- <node name="map_server" pkg="map_server" type="map_server" args="$(find omron_os32c_driver)/maps/my_map.yaml"/> -->
+  
+<!--   
+  <include file = "$(find omron_os32c_driver)/launch/amcl_os32c.launch">
+    <arg name="initial_pose_x" default="-1.5"/>
+		<arg name="initial_pose_y" default="-0.3"/>
+		<arg name="initial_pose_a" default="0.0"/>
+	</include> -->
+<!-- 
+  <include file="$(find omron_os32c_driver)/launch/hector_os32c.launch">
+    <arg name="base_frame"    value="base_link" />
+    <arg name="odom_frame"    value="base_link"/>
+    <arg name="map_resol"     value="0.05"/>
+    <arg name="scan_topic"    value="scan" />
+  </include>
+
+  <include file="$(find omron_os32c_driver)/launch/trajectory_os32c.launch">
+    <arg name="global_frame"  value="map" />
+    <arg name="track_frame"   value="base_link"/>
+    <arg name="update_rate"   value="10" />
+    <arg name="publish_rate"  value="6.0" />
+  </include>
+ -->
+
+  <arg name="geotiff_map_file_path" default="$(find omron_os32c_driver)/maps"/>
+  
+
+  <include file="$(find omron_os32c_driver)/launch/mapping_os32c.launch">
+    <arg name="base_frame"    value="base_link" />
+    <arg name="odom_frame"    value="base_link"/>
+    <arg name="scan_topic"    value="scan" />
+  </include>
+
+  <include file="$(find omron_os32c_driver)/launch/geotiff_mapper_os32c.launch">
+    <arg name="trajectory_source_frame_name" value="scanmatcher_frame"/>
+    <arg name="map_file_path" value="$(arg geotiff_map_file_path)"/>
+  </include>
+  
+</launch>
